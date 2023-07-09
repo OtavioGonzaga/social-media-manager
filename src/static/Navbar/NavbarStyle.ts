@@ -14,10 +14,12 @@ export const Header = styled.header`
 export const Logo = styled.div`
 	display: flex;
 	width: 50%;
-	&& img {
-		width: 80%;
+	&& a img {
+		width: 40%;
 	}
 `
-export const nav = styled.nav`
-
+export const Menu = styled.nav`
+	width: 30%;
+	display: flex;
+	justify-content: space-between;
 `

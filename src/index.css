@@ -18,3 +18,9 @@ a {
 	text-decoration: none;
 	color: #faa54a;
 }
+a:hover {
+	text-decoration: underline;
+}
+.disabled {
+	color: #d7dee8;
+}
