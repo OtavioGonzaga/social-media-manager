@@ -9,4 +9,9 @@ export const button = styled.button`
 	margin-top: 20px;
 	font-size: 120%;
 	padding: 10px 0;
+	transition: .3s;
+	&&:hover {
+		background-color: #d33a86;
+		cursor: pointer;
+	}
 `

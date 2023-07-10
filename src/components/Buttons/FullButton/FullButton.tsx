@@ -5,5 +5,5 @@ interface props {
 }
 
 export default function FullButton({ text }: props) {
-	return <S.button>{text}</S.button>
+	return <S.button type='submit' >{text}</S.button>
 }
