@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const section = styled.section`
+	margin-top: 1%;
 	display: flex;
 	flex-wrap: wrap;
 `
@@ -15,7 +16,7 @@ export const Image = styled.div`
 
 export const Welcome = styled.div`
 	width: 45%;
-	margin: 1% 10% 0 0;
+	margin: 0 10% 0 0;
 	&& h1 {
 		letter-spacing: 2px;
 		font-weight: bold;

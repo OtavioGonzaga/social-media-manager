@@ -19,9 +19,11 @@ export const Input = styled.div`
 		background-color: transparent;
 		width: 90%;
 	}
+	&& svg {
+		flex: 10%;
+	}
 	&& span {
-		position: absolute;
-		left: 40%;
+		flex: 5%;
 		color: white !important;
 	}
 `

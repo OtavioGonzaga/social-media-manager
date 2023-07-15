@@ -9,9 +9,10 @@
 body {
 	width: 100%;
 	color: white;
+	background-color: #1b1b37;
 }
 section, article {
-	padding: 90px 10%;
+	padding: 0 10%;
 	background-color: #1b1b37;
 }
 a {
@@ -23,4 +24,13 @@ a:hover {
 }
 .disabled {
 	color: #d7dee8;
+}
+.main_container {
+	min-height: 86vh;
+}
+.link {
+	color: #faa54a !important;
+}
+.link:hover {
+	cursor: pointer;
 }
