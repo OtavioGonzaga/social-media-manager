@@ -4,6 +4,7 @@ import Loading from '../components/Loading/Loading'
 
 interface AuthContextTypes {
 	isAuthenticated: boolean,
+	setIsAuthenticated: any,
 	email: string | null,
 	setEmail: any,
 	name: string | null,
@@ -13,6 +14,7 @@ interface AuthContextTypes {
 
 export const AuthContext = createContext<AuthContextTypes>({
 	isAuthenticated: false,
+	setIsAuthenticated: false,
 	email: null,
 	setEmail: null,
 	name: null,
@@ -43,7 +45,7 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
 	if (loading) return <Loading />
 
 	return (
-		<AuthContext.Provider value={{isAuthenticated, email, setEmail, name, setName, logout}}>
+		<AuthContext.Provider value={{isAuthenticated, setIsAuthenticated, email, setEmail, name, setName, logout}}>
 			{children}
 		</AuthContext.Provider>
 	)

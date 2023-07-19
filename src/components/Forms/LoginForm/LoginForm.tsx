@@ -30,7 +30,7 @@ export default function LoginForm({HandleSubmit, HandleChange}: props) {
 					Facebook
 				</S.ContinueWith>
 			</div>
-			<FullButton text="Log In" />
+			<FullButton text="Log In" submit={true} />
 		</S.form>
 		</>
 	)

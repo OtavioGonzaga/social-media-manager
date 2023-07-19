@@ -34,3 +34,6 @@ a:hover {
 .link:hover {
 	cursor: pointer;
 }
+.half {
+	width: 50% !important;
+}

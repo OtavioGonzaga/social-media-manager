@@ -1,14 +1,15 @@
 import * as S from './CardStyle'
 
 interface props {
-	Component: JSX.Element
+	children: JSX.Element,
+	CustomClass?: string
 }
 
-export default function LoginCard({Component}: props) {
+export default function Card(props: props) {
 	return (
 		<>
-		<S.Card>
-			{Component}
+		<S.Card className={props.CustomClass}>
+			{props.children}
 		</S.Card>
 		</>
 	)

@@ -1,11 +1,15 @@
 import styled from 'styled-components'
 
 export const Section = styled.section`
+	display: flex;
+	justify-content: center;
 	&& form h2 {
-			margin-bottom: 3%;
-		}
+		font-size: 200%;
+		margin-bottom: 3%;
+	}
 	&& form {
-		margin: 2% 25%;
-		width: 50%;
+		background-color: #16161d;
+		margin: 2% 0;
+		width: 100%;
 	}
 `

@@ -7,7 +7,7 @@ export default function Navbar() {
 	return (
 		<S.Header>
 				<S.Logo>
-					<Link to='/'><img src="img/logo.png" alt="logo" /></Link>
+					<Link to={useContext(AuthContext).isAuthenticated? '/dashboard' : '/'}><img src="img/logo.png" alt="logo" /></Link>
             	</S.Logo>
             <S.Menu>
                 <Link to={useContext(AuthContext).isAuthenticated? '/dashboard' : '/'}>Home</Link>
