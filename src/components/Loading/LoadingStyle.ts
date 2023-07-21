@@ -6,7 +6,9 @@ const spinAnimation = keyframes`
 `
 
 export const Load = styled.div`
-	opacity: 5;
+	position: absolute;
+	top: 0;
+	background-color: rgba(190, 190, 190, .2);
 	height: 100vh;
 	width: 100%;
 	display: flex;

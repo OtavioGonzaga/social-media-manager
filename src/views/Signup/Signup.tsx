@@ -7,31 +7,40 @@ import axios from 'axios'
 import FullButton from '../../components/Buttons/FullButton/FullButton'
 import Message from '../../components/message/Message'
 import Card from '../../components/Card/Card'
+import Loading from '../../components/Loading/Loading'
+import FormsValidation from '../../helpers/FormsValidation'
 
 export default function Signup() {
-	const [user, setUser] = useState({})
+	const [user, setUser] = useState({name: '', email: '', password: '', passwordtwo: ''})
 	const [message, setMessage] = useState('')
+	const [loading, setLoading] = useState(false)
 
-	function SubmitForm(e: SyntheticEvent) {
+	async function SubmitForm(e: SyntheticEvent) {
 		e.preventDefault()
-		axios.post(process.env.REACT_APP_API_URL + '/signup', user).then(res => {
-			if (res.status === 200) {
-				setMessage(res.data.join(', '))	
-			}
-		}).catch(err => {
-			console.error(err)
-		})
+		setLoading(true)
+		const validation = await FormsValidation({type: 'login', email: user.email, password: user.password})
+
+		if (validation.length === 0) {
+			axios.post(process.env.REACT_APP_API_URL + '/signup', user).then(res => {
+				if (res.status === 200) {
+					setMessage(res.data.join(', '))
+				}
+			}).catch(err => {
+				console.error(err)
+			})
+		}
 	}
 
 	function handleOnChange(e: BaseSyntheticEvent) {
 		setUser({...user, [e.target.name]: e.target.value})
 	}
 
+	
 	return (
+		<>
+		{loading && <Loading />}
 		<S.Section>
-			{message && (
-				<Message text={message} type='error' />
-			)}
+			<Message text={message} type='error' />
 			<Card CustomClass='half'>
 				<form onSubmit={SubmitForm}>
 					<h2>Register your account:</h2>
@@ -43,5 +52,6 @@ export default function Signup() {
 				</form>
 			</Card>
 		</S.Section>
+		</>
 	)
 }
