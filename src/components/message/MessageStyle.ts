@@ -25,8 +25,9 @@ export default function SMessage(type: string) {
 		}
 		&& p {
 			text-transform: capitalize;
-			color: ${border};
+			color: white;
 			width: 95%;
+
 		}
 	`
 }

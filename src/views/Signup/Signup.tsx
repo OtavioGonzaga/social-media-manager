@@ -18,16 +18,19 @@ export default function Signup() {
 	async function SubmitForm(e: SyntheticEvent) {
 		e.preventDefault()
 		setLoading(true)
-		const validation = await FormsValidation({type: 'login', email: user.email, password: user.password})
+		const validation = await FormsValidation({type: 'register', email: user.email, password: user.password})
 
-		if (validation.length === 0) {
+		if (Object.keys(validation).length > 0 && !validation.ERROR) {
 			axios.post(process.env.REACT_APP_API_URL + '/signup', user).then(res => {
 				if (res.status === 200) {
 					setMessage(res.data.join(', '))
 				}
 			}).catch(err => {
+				setMessage('Looks like we had a problem...')
 				console.error(err)
 			})
+		} else {
+			console.log(validation)
 		}
 	}
 

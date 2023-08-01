@@ -8,19 +8,49 @@ interface props {
 	passwordTwo?: string
 }
 
-export default async function FormsValidation({type, email, password, name, passwordTwo}: props): Promise<object[]> {
-	let errors = [{}]
+interface ReturnVal {
+	ERROR: boolean,
+	email: string[],
+	password: string[],
+	name: string[]
+} 
+
+export default async function FormsValidation({type, email, password, name = '', passwordTwo = ''}: props): Promise<ReturnVal> {
+	let errors: ReturnVal = {
+		ERROR: false,
+		email: [],
+		password: [],
+		name: []
+	}
 
 	if (type === 'login') {
-		const {data, status} = await axios.get(`${process.env.REACT_APP_API_URL}/databasequery/Users/${email}`)
-		if (status === 200 && data !== null) errors.push({email: 'Already exists an account with the specified email'})
+		const {status} = await axios.get(`${process.env.REACT_APP_API_URL}/${password}`)
+		if (status === 401) {
+			errors.password.push('wrong password')
+		} else if (status !== 200) errors.ERROR = true
 
-		
 	}
-
+	
 	if (type === 'register') {
-		axios.get(`${process.env.REACT_APP_API_URL}/databasequery/Users/${email}`)
+		if (email.length > 0) {
+			const { status, data } = await axios.get(`${process.env.REACT_APP_API_URL}/databasequery/Users/${email}`)
+			if (status === 500) errors.ERROR = true
+			if (status === 200 && data !== null) errors.email.push('Already exists an account with the specified email')
+		}
+			
+		if (password === passwordTwo) errors.password.push('Password checker must be equal to the password')
+		if (password.length < 8) errors.password.push('the password must be at least 8 characters')
+		if (password.length > 30) errors.password.push('the password must have a maximum of 30 characters')
+		if (password.includes(' ')) errors.password.push('the password must not have spaces')
+	
+		if (/[^a-zA-Z\s]/.test(name)) errors.name.push('the name must not contain invalid characters (Ex.: !@#$%¨&*)')
+		if (name.length < 3) errors.name.push('the name must be at least 3 characters')
+		if (name.length > 25) errors.name.push('the name must be less than 25 characters')
 	}
+
+	if (!email.includes('@') || !email.includes('.') || email.length > 150) errors.email.push('enter a valid email')
+	if (email.length < 6) errors.email.push('the email must be at least 7 characters')
+	if (!password || password.length === 0) errors.password.push('the password must be provided')
 
 	return errors
 }
