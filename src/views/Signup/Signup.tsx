@@ -19,18 +19,27 @@ export default function Signup() {
 		e.preventDefault()
 		setLoading(true)
 		const validation = await FormsValidation({type: 'register', email: user.email, password: user.password})
+		let AllErrors: string[] = []
+		
+		if (validation) {
+			AllErrors = AllErrors.concat(validation.email)
+			AllErrors = AllErrors.concat(validation.password)
+			AllErrors = AllErrors.concat(validation.name)
 
-		if (Object.keys(validation).length > 0 && !validation.ERROR) {
-			axios.post(process.env.REACT_APP_API_URL + '/signup', user).then(res => {
-				if (res.status === 200) {
-					setMessage(res.data.join(', '))
-				}
-			}).catch(err => {
-				setMessage('Looks like we had a problem...')
-				console.error(err)
-			})
+			if (validation && AllErrors.length === 0) {
+				axios.post(process.env.REACT_APP_API_URL + '/signup', user).then(res => {
+					if (res.status === 200) {
+						setMessage(res.data.join(', '))
+					}
+				}).catch(err => {
+					setMessage('Looks like we had a problem...')
+					console.error(err)
+				})
+			} else {
+				setMessage(AllErrors.join(', '))
+			}
 		} else {
-			console.log(validation)
+			setMessage('Looks like we had a problem...')
 		}
 	}
 
