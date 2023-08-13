@@ -9,6 +9,9 @@ export const Input = styled.div`
 	border-radius: 8px;
 	display: flex;
 	justify-content: space-between;
+	&.redborder {
+		border: 2px solid rgb(999, 0, 0, 0.5);
+	}
 	&& input {
 		color: white;
 		padding: 0;
@@ -25,5 +28,23 @@ export const Input = styled.div`
 	&& span {
 		flex: 5%;
 		color: white !important;
+	}
+`
+export const Warning = styled.div`
+	margin-bottom: 10px;
+	display: flex;
+	width: 100%;
+	align-items: center;
+	color: red;
+	&& svg {
+		margin: 0 10px;
+	}
+	&& p {
+		font-size: 80%;
+		width: 90%;
+		display: inline-block;
+	}
+	&& p::first-letter {
+		text-transform: uppercase;
 	}
 `

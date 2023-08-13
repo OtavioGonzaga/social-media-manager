@@ -14,7 +14,7 @@ interface ReturnVal {
 	name: string[]
 } 
 
-export default async function FormsValidation({type, email, password, name = '', passwordTwo = ''}: props): Promise<ReturnVal | null> {
+export default async function FormsValidation({type = '', email = '', password = '', name = '', passwordTwo = ''}: props): Promise<ReturnVal | null> {
 	let errors: ReturnVal = {
 		email: [],
 		password: [],
@@ -31,15 +31,15 @@ export default async function FormsValidation({type, email, password, name = '',
 		
 		if (type === 'register') {
 			if (email.length > 0) {
-				const { status, data } = await axios.get(`${process.env.REACT_APP_API_URL}/databasequery/Users/${email}`)
+				const { status } = await axios.get(`${process.env.REACT_APP_API_URL}/databasequery/Users/${email}`)
 				if (status === 500) return null
-				if (status === 200 && data !== null) {
-					errors.email.push('Already exists an account with the specified email')
+				if (status === 200) {
+					errors.email.push('already exists an account with the specified email')
 					return errors
 				} 
 			}
 				
-			if (password === passwordTwo) errors.password.push('Password checker must be equal to the password')
+			if (password === passwordTwo) errors.password.push('password checker must be equal to the password')
 			if (password.length < 8) errors.password.push('the password must be at least 8 characters')
 			if (password.length > 30) errors.password.push('the password must have a maximum of 30 characters')
 			if (password.includes(' ')) errors.password.push('the password must not have spaces')
