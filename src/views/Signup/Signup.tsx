@@ -1,4 +1,4 @@
-import { BaseSyntheticEvent, SyntheticEvent, useState } from 'react'
+import { BaseSyntheticEvent, SyntheticEvent, useContext, useState } from 'react'
 import * as S from './SignupStyle'
 import Input from '../../components/Forms/Inputs/Input'
 import { BsFillPersonFill } from 'react-icons/bs'
@@ -10,6 +10,7 @@ import Card from '../../components/Card/Card'
 import Loading from '../../components/Loading/Loading'
 import FormsValidation from '../../helpers/FormsValidation'
 import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../../contexts/AuthContext'
 
 export default function Signup() {
 	const [user, setUser] = useState({name: '', email: '', password: '', passwordtwo: ''})
@@ -18,6 +19,7 @@ export default function Signup() {
 	const [EmailWarning, setEmailWarning] = useState('')
 	const [PasswordWarning, setPasswordWarning] = useState('')
 	const [NameWarning, setNameWarning] = useState('')
+	const AuthState = useContext(AuthContext)
 	const history = useNavigate()
 
 	async function SubmitForm(e: SyntheticEvent) {
@@ -25,32 +27,51 @@ export default function Signup() {
 		setLoading(true)
 		setMessage('')
 
-		const validation = await FormsValidation({type: 'register', name: user.name, email: user.email, password: user.password, passwordTwo: user.password})
-		
-		if (validation) {
-			if (validation && validation.name.length === 0 && validation.email.length === 0 && validation.name.length === 0) {
-				axios.post(process.env.REACT_APP_API_URL + '/signup', user).then(res => {
-					if (res.status === 200) {
-						setMessage(res.data.join(', '))
-					} else if (res.status === 201) {
+		FormsValidation({type: 'register', name: user.name, email: user.email, password: user.password, passwordTwo: user.password}).then(validation => {
+			console.log(validation)
+			if (validation) {
+				if (validation && validation.name.length === 0 && validation.email.length === 0 && validation.name.length === 0) {
+					axios.post(process.env.REACT_APP_API_URL + '/signup', user).then(res => {
+						if (res.status === 200) {
+							setMessage(res.data.join(', '))
+						} else if (res.status === 201) {
+							setLoading(false)
+							axios.post(`${process.env.REACT_APP_API_URL}/login`, {email: user.email, password: user.password}).then(res => {
+								if (res.status === 204) {
+									// Especifique que o erro foi culpa do front
+									//TODO: menssagem global
+								} else if (res.data) {
+									localStorage.setItem('token', res.data.token)
+									AuthState.setIsAuthenticated(true)
+									history('/dashboard')
+								}
+							}).catch(
+								// Mensagem global de erro ao fazer login após criar a conta (a conta foi criada)
+								//TODO: mensagem global
+							)
+						}
+					}).catch(err => {
+						setMessage('Looks like we had a problem...')
 						setLoading(false)
-						history('/dashboard')
-					}
-				}).catch(err => {
-					setMessage('Looks like we had a problem...')
+						console.error(err)
+					})
+				} else {
+					setEmailWarning(validation.email.join(', '))
+					setNameWarning(validation.name.join(', '))
+					setPasswordWarning(validation.password.join(', '))
 					setLoading(false)
-					console.error(err)
-				})
+				}
 			} else {
-				setEmailWarning(validation.email.join(', '))
-				setNameWarning(validation.name.join(', '))
-				setPasswordWarning(validation.password.join(', '))
+				setMessage('Looks like we had a problem...')
 				setLoading(false)
 			}
-		} else {
+		}).catch(err => {
+			console.log(err) 
 			setMessage('Looks like we had a problem...')
 			setLoading(false)
-		}
+		})
+		
+		
 	}
 
 	function handleOnChange(e: BaseSyntheticEvent) {

@@ -24,10 +24,14 @@ export default function Home() {
 	
 	function HandleOnSubmit(e: SyntheticEvent) {
 		e.preventDefault()
+		setLoading(true)
 		axios.post(`${process.env.REACT_APP_API_URL}/login`, {email: email, password: password}).then(res => {
-			localStorage.setItem('token', res.data.token)
-			AuthState.setIsAuthenticated(true)
-			setLoading(true)
+			if (res.status === 204) {
+				//TODO: menssagem de falha na autenticação
+			} else {
+				localStorage.setItem('token', res.data.token)
+				AuthState.setIsAuthenticated(true)
+			}
 		}).catch(err => {
 			console.log(err)
 		})
