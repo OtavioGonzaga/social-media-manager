@@ -28,19 +28,20 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
 	const [isAuthenticated, setIsAuthenticated] = useState(false)
 	const [loading, setLoading] = useState(true)
 
+	function logout() {
+		localStorage.removeItem('token')
+	}
+
 	useEffect(() => {
 		axios.post(`${process.env.REACT_APP_API_URL}/`, {token: localStorage.getItem('token')}).then(res => {
 			setLoading(false)
 			setIsAuthenticated(res.status === 200 ? true : false)
 		}).catch(err => {
 			console.error(err)
+			logout()
 			setLoading(false)
 		})
 	}, [])
-
-	function logout() {
-		localStorage.removeItem('token')
-	}
 
 	if (loading) return <Loading />
 

@@ -8,9 +8,15 @@ import { useNavigate } from "react-router-dom"
 interface props {
 	HandleSubmit: (e: SyntheticEvent) => void
 	HandleChange: (e: BaseSyntheticEvent) => void
+	emailValue?: string
+	passwordValue?: string
+	Warnings: {
+		email: string,
+		password: string
+	}
 }
 
-export default function LoginForm({HandleSubmit, HandleChange}: props) {
+export default function LoginForm({HandleSubmit, HandleChange, Warnings, emailValue = '', passwordValue = ''}: props) {
 	const history = useNavigate()
 
 	return (
@@ -18,8 +24,8 @@ export default function LoginForm({HandleSubmit, HandleChange}: props) {
 		<S.form onSubmit={HandleSubmit}>
 			<h3>Log in to your account</h3>
 			<p className="disabled">Don't have an account? <span className="link" onClick={() => history('/signup')}>Sign Up</span></p>
-			<Input type='text' name="email" placeholder='Type your e-mail...' text='E-mail:' InputIcon={HiOutlineMail} HandleChange={HandleChange} />
-			<Input type='password' name='password' placeholder='Type your password...' text='Password:' InputIcon={HiKey} HandleChange={HandleChange}/>
+			<Input type='email' name="email" placeholder='Type your e-mail...' text='E-mail:' value={emailValue} InputIcon={HiOutlineMail} HandleChange={HandleChange} Warning={Warnings.email} />
+			<Input type='password' name='password' placeholder='Type your password...' text='Password:' value={passwordValue} InputIcon={HiKey} HandleChange={HandleChange} Warning={Warnings.password} />
 			<div className="continuewith">
 				<S.ContinueWith href='/'>
 					<FaGoogle />

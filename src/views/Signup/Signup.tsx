@@ -28,27 +28,28 @@ export default function Signup() {
 		setMessage('')
 
 		FormsValidation({type: 'register', name: user.name, email: user.email, password: user.password, passwordTwo: user.password}).then(validation => {
-			console.log(validation)
 			if (validation) {
-				if (validation && validation.name.length === 0 && validation.email.length === 0 && validation.name.length === 0) {
-					axios.post(process.env.REACT_APP_API_URL + '/signup', user).then(res => {
-						if (res.status === 200) {
+				if (validation.name.length === 0 && validation.email.length === 0 && validation.name.length === 0) {
+					axios.post(`${process.env.REACT_APP_API_URL}/signup`, user).then(res => {
+						if (res.status === 200) {	
+							setLoading(false)
 							setMessage(res.data.join(', '))
 						} else if (res.status === 201) {
-							setLoading(false)
 							axios.post(`${process.env.REACT_APP_API_URL}/login`, {email: user.email, password: user.password}).then(res => {
+								setLoading(false)
 								if (res.status === 204) {
-									// Especifique que o erro foi culpa do front
-									//TODO: menssagem global
+									
 								} else if (res.data) {
+									console.log(res.data)
 									localStorage.setItem('token', res.data.token)
 									AuthState.setIsAuthenticated(true)
 									history('/dashboard')
 								}
-							}).catch(
-								// Mensagem global de erro ao fazer login após criar a conta (a conta foi criada)
-								//TODO: mensagem global
-							)
+							}).catch((err) => {
+								console.log(err)
+								setLoading(false)
+								setMessage("Login failed. Sign in manually")
+							})
 						}
 					}).catch(err => {
 						setMessage('Looks like we had a problem...')
@@ -87,10 +88,10 @@ export default function Signup() {
 			<Card CustomClass='half'>
 				<form onSubmit={SubmitForm}>
 					<h2>Register your account:</h2>
-					<Input type='text' name='name' placeholder='Type your name...' InputIcon={BsFillPersonFill} text='Name:' HandleChange={handleOnChange} Warning={NameWarning} />
-					<Input type='email' name='email' placeholder='Type your email...' InputIcon={HiOutlineMail} HandleChange={handleOnChange} Warning={EmailWarning} text='Email:' />
-					<Input type='password' name='password' placeholder='Type your password...' InputIcon={HiKey} HandleChange={handleOnChange} Warning={PasswordWarning} text='Password:' />
-					<Input type='password' name='passwordtwo' placeholder='Confirm your password...' InputIcon={HiKey} HandleChange={handleOnChange} Warning={PasswordWarning} text='Confirm your password:' />
+					<Input type='text' name='name' placeholder='Type your name...' value={user.name} InputIcon={BsFillPersonFill} text='Name:' HandleChange={handleOnChange} Warning={NameWarning} />
+					<Input type='email' name='email' placeholder='Type your email...' value={user.email} InputIcon={HiOutlineMail} HandleChange={handleOnChange} Warning={EmailWarning} text='Email:' />
+					<Input type='password' name='password' placeholder='Type your password...' value={user.password} InputIcon={HiKey} HandleChange={handleOnChange} Warning={PasswordWarning} text='Password:' />
+					<Input type='password' name='passwordtwo' placeholder='Confirm your password...' value={user.passwordtwo} InputIcon={HiKey} HandleChange={handleOnChange} Warning={PasswordWarning} text='Confirm your password:' />
 					<FullButton text='Create account' submit={true} />
 				</form>
 			</Card>

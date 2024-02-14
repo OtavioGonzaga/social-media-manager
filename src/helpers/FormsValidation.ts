@@ -23,10 +23,21 @@ export default async function FormsValidation({type = '', email = '', password =
 	
 	try {
 		if (type === 'login') {
-			const {status} = await axios.get(`${process.env.REACT_APP_API_URL}/${password}`)
-			if (status === 401) {
+			if (email.length > 0) {
+				const { status } = await axios.get(`${process.env.REACT_APP_API_URL}/databasequery/Users/${email}`)
+				if (status === 500) return null
+				if (status === 204) {
+					errors.email.push('There is no account with this email')
+					return errors
+				}
+			}
+			const status = password ? (await axios.get(`${process.env.REACT_APP_API_URL}/passwordmatches/${email}/${password}`)).status : 204
+			if (status === 204) {
 				errors.password.push('wrong password')
-			} else if (status !== 200) return null
+			} else if (status !== 200) {
+				console.log(status)
+				return null
+			}
 		}
 		
 		if (type === 'register') {
@@ -39,7 +50,7 @@ export default async function FormsValidation({type = '', email = '', password =
 				} 
 			}
 				
-			if (password === passwordTwo) errors.password.push('password checker must be equal to the password')
+			if (password !== passwordTwo) errors.password.push('password checker must be equal to the password')
 			if (password.length < 8) errors.password.push('the password must be at least 8 characters')
 			if (password.length > 30) errors.password.push('the password must have a maximum of 30 characters')
 			if (password.includes(' ')) errors.password.push('the password must not have spaces')
