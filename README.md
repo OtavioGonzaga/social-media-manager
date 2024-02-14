@@ -1,6 +1,7 @@
 # Social Media Mananger Project
->	*development status*: in development ⚠
+>*development status*: in development ⚠
 <p>Social Media Mananger (generic name) is a opensource project with react + typescript</p>
+<p>The objective of this project is make a good frontend with react and pratice the backend API integration with social medias</p>
 
 ## Get Started
 <p>To begin, in the root of project type the comand:</p>
